@@ -1,27 +1,11 @@
 import React from "react";
-import clsx from "clsx";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import theme from "../atoms/theme";
 import { ThemeProvider } from "@material-ui/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
-import Box from "@material-ui/core/Box";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import Container from "@material-ui/core/Container";
+import { Typography, Box, Container } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import IconButton from "@material-ui/core/IconButton";
-import HomeIcon from "@material-ui/icons/Home";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import { auth } from "../atoms/firebase";
+import AdminSideBar from "../admin/AdminSideBar";
+import AdminHead from "../admin/AdminHead";
 
 const drawerWidth = 240;
 
@@ -30,30 +14,12 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: "flex",
     },
-    toolbar: {
-      paddingRight: 24,
-    },
     toolbarIcon: {
       display: "flex",
       alignItems: "center",
       justifyContent: "flex-end",
       padding: "0 8px",
       ...theme.mixins.toolbar,
-    },
-    appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    appBarShift: {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
     },
     menuButton: {
       marginRight: 36,
@@ -110,7 +76,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Copyright = () => {
+const Copyright = React.memo(() => {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
@@ -121,107 +87,20 @@ const Copyright = () => {
       {"."}
     </Typography>
   );
-};
-
-export interface GenericTemplateProps {
+});
+interface GenericTemplateProps {
   children: React.ReactNode;
   title: string;
 }
 
-const GenericTemplate: React.FC<GenericTemplateProps> = ({
-  children,
-  title,
-}) => {
+const AdminTemplate = ({ children, title }: GenericTemplateProps) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawer = () => {
-    setOpen(!open);
-  };
-  const handleLogout = async () => {
-      try {
-          await auth.signOut();
-      } catch(error) {
-        alert(error.message);
-      }
-  }
 
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
-        <CssBaseline />
-        <AppBar
-          position="absolute"
-          className={clsx(classes.appBar, open && classes.appBarShift)}
-        >
-          <Toolbar className={classes.toolbar}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawer}
-              className={clsx(
-                classes.menuButton,
-                open && classes.menuButtonHidden
-              )}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              className={classes.title}
-            >
-              管理画面
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-          }}
-          open={open}
-        >
-          <div className={classes.toolbarIcon}>
-            <IconButton onClick={handleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </div>
-          <Divider />
-          <List>
-            <Link to="/admin/home" className={classes.link}>
-              <ListItem button>
-                <ListItemIcon>
-                  <HomeIcon />
-                </ListItemIcon>
-                <ListItemText primary="トップページ" />
-              </ListItem>
-            </Link>
-            <Link to="/admin/adminSiteAdd" className={classes.link}>
-              <ListItem button>
-                <ListItemIcon>
-                  <ShoppingCartIcon />
-                </ListItemIcon>
-                <ListItemText primary="サイト追加ページ" />
-              </ListItem>
-            </Link>
-            <Link to="/" className={classes.link}>
-              <ListItem button>
-                <ListItemIcon>
-                  <ShoppingCartIcon />
-                </ListItemIcon>
-                <ListItemText primary="サイト.com" />
-              </ListItem>
-            </Link>
-            <Link to="/" className={classes.link}>
-              <ListItem button onClick={handleLogout}>
-                <ListItemText primary="ログアウト" />
-              </ListItem>
-            </Link>
-          </List>
-        </Drawer>
+        <AdminHead />
+        <AdminSideBar />
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
@@ -244,5 +123,4 @@ const GenericTemplate: React.FC<GenericTemplateProps> = ({
     </ThemeProvider>
   );
 };
-
-export default GenericTemplate;
+export default AdminTemplate;

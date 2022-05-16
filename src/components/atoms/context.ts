@@ -1,34 +1,28 @@
-import React from "react";
-import { Data } from "../admin/AdminPage";
+import React, { createContext } from "react";
 
-export const SiteContext = React.createContext<{ state: SiteState, dispatch: (value :{
-    type: string;
-    payload: Data;
-}) => void}| undefined>(undefined);
-
-interface SiteState {
-    process: string,
-    post: {},
-}
-
-export const initialState: SiteState = {
-    process: "",
-    post: {}
+export type siteDetail = {
+  id: string;
+  siteName: string;
+  url: string;
+  siteIntroduction: string;
+  imageName: string;
+  category: string;
+  categoryName: string;
 };
 
-export const siteDataReducer = (state: SiteState, action: {type: string, payload: Data}) => {
-    switch(action.type) {
-        case 'DETAIL':
-            return {
-                process: "detail",
-                post: action.payload,
-            }
-        case 'DELETE':
-            return {
-                process: "delete",
-                post: action.payload,
-            }
-        default:
-            return state
-    }
+export type ContextType = {
+  detail: siteDetail;
+  setDetail: React.Dispatch<React.SetStateAction<siteDetail>>;
+};
+
+export const SiteContext = createContext({} as ContextType);
+
+export const initialValue = {
+  id: "id",
+  siteName: "サイト名",
+  url: "URL",
+  siteIntroduction: "サイト説明文",
+  imageName: "imageName",
+  category: "カテゴリーNo",
+  categoryName: "カテゴリー名",
 };
