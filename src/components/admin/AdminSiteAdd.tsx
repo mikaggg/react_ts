@@ -3,8 +3,8 @@ import AdminTemplate from "../templates/AdminTemplate";
 import { Button, InputLabel, TextField, Typography } from "@material-ui/core";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import { LinearProgress, Box, Container } from "@material-ui/core";
-import { Select, MenuItem, SelectChangeEvent } from "@material-ui/core";
+import { Box, Container } from "@material-ui/core";
+import { Select, MenuItem } from "@material-ui/core";
 import { storage, store } from "../atoms/firebase";
 import { collection, doc, serverTimestamp } from "firebase/firestore";
 import { runTransaction } from "firebase/firestore";
@@ -85,9 +85,6 @@ const AdminSiteAdd: React.FC = () => {
   const [image, setImage] = useState<string>("");
   const [imageName, setImageName] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>("");
-  const [progress] = useState(0);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [message] = useState("");
 
   const {
     register,
@@ -98,13 +95,14 @@ const AdminSiteAdd: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<{ value: any; name?: any }>
+  ) => {
     const { name, value } = e.target;
     setValue({
       ...values,
       [name]: value,
     });
-    setErrorMessage("");
   };
 
   const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +115,6 @@ const AdminSiteAdd: React.FC = () => {
         setImage(resizeImage);
         setImageName(imageName);
         setImageUrl(window.URL.createObjectURL(blobImage));
-        setErrorMessage("");
       }
     }
   };
@@ -129,17 +126,7 @@ const AdminSiteAdd: React.FC = () => {
     setImageUrl("");
   };
 
-  const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (!values.url || !values.siteIntroduction || !values.category) {
-      setErrorMessage("未記入の項目があります");
-      return;
-    }
-    if (!image) {
-      setErrorMessage("ファイルが選択されていません");
-      return;
-    }
-
+  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const storeRef = doc(collection(store, "sites"));
     const data = {
       siteName: values.siteName,
@@ -152,27 +139,15 @@ const AdminSiteAdd: React.FC = () => {
 
     try {
       await runTransaction(store, async (transaction) => {
-        const sitesDoc = await transaction.set(storeRef, data);
-        if (!sitesDoc) {
-          throw "Document dose not exist!";
-        }
+        await transaction.set(storeRef, data);
         const storageRef = ref(storage, "image/" + imageName);
-        uploadString(storageRef, image, "data_url")
-          .then((snapshot) => {
-            console.log("Uploaded a data_url string!");
-          })
-          .catch(() => {
-            setErrorMessage("画像の登録に失敗しました。");
-            throw "error: strage upload";
-          });
+        await uploadString(storageRef, image, "data_url");
         clearInput();
       });
     } catch (e) {
       console.log("Transaction failed:", e);
     }
   };
-
-  const onSubmit = (data: FormValues) => console.log(data);
 
   return (
     <AdminTemplate title="サイト追加">
@@ -189,10 +164,6 @@ const AdminSiteAdd: React.FC = () => {
         </Box>
 
         <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-          {message && <Typography>{message}</Typography>}
-          {errorMessage && (
-            <Typography color="secondary">{errorMessage}</Typography>
-          )}
           <TextField
             error={!!errors.siteName}
             id="siteName"
@@ -246,9 +217,8 @@ const AdminSiteAdd: React.FC = () => {
             margin="none"
             required
             fullWidth
-            value={values.category}
             onChange={handleInputChange}
-            defaultValue="onlineService"
+            value={values.category}
           >
             {categorys.map((category) => (
               <MenuItem key={category.value} value={category.value}>
@@ -273,12 +243,6 @@ const AdminSiteAdd: React.FC = () => {
               accept="image/*"
             />
           </Button>
-          {progress > 0 && progress !== 100 && (
-            <div>
-              <LinearProgress variant="determinate" value={progress} />
-              <Typography>{`${Math.round(progress)}`}%</Typography>
-            </div>
-          )}
           {image && <p>{imageName}</p>}
           <div className={classes.preview}>
             <img className={classes.previewImg} src={imageUrl} alt="" />
@@ -289,7 +253,6 @@ const AdminSiteAdd: React.FC = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={onClick}
           >
             送信
           </Button>

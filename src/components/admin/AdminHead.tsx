@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const AdminHead = React.memo(() => {
+const AdminHead = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawer = () => {
@@ -79,6 +79,6 @@ const AdminHead = React.memo(() => {
       </AppBar>
     </>
   );
-});
+};
 
 export default AdminHead;

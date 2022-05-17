@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const AdminSideBar = React.memo(() => {
+const AdminSideBar = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawer = () => {
@@ -111,5 +111,5 @@ const AdminSideBar = React.memo(() => {
       </Drawer>
     </>
   );
-});
+};
 export default AdminSideBar;

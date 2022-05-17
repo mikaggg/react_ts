@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import AdminTemplate from "../templates/AdminTemplate";
 import { makeStyles, Theme, LinearProgress } from "@material-ui/core/";
 import { Typography, TextField, Button, Input } from "@material-ui/core/";
+import { Select, MenuItem, InputLabel } from "@material-ui/core";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -69,12 +70,10 @@ const resizeFile = (file: Blob) =>
     );
   });
 
-export default function AdminDetail() {
+const AdminDetail = () => {
   const classes = useStyles();
   const { detail, setDetail } = useContext(SiteContext);
   const { image, setImage } = useContext(ImageContext);
-  const [message, setMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const [progress, setProgress] = useState(0);
   const [beforeImageName, setBeforeImageName] = useState("");
 
@@ -94,7 +93,9 @@ export default function AdminDetail() {
     resolver: yupResolver(schema),
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<{ value: any; name?: any }>
+  ) => {
     const { name, value } = e.target;
     setDetail({
       ...detail,
@@ -115,31 +116,15 @@ export default function AdminDetail() {
           imageName: imageName,
           beforeImageName: beforeImageName,
         });
-        setErrorMessage("");
       }
     }
   };
 
-  const onClick = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (!detail.url || !detail.siteIntroduction || !detail.category) {
-      setErrorMessage("未記入の項目があります");
-      return;
-    }
-    if (!image) {
-      setErrorMessage("ファイルが選択されていません");
-      return;
-    }
-  };
   const onSubmit = (data: FormValues) => console.log(data);
 
   return (
     <AdminTemplate title="サイト編集">
       <form className={classes.form} onSubmit={() => handleSubmit(onSubmit)}>
-        {message && <Typography>{message}</Typography>}
-        {errorMessage && (
-          <Typography color="secondary">{errorMessage}</Typography>
-        )}
         <TextField
           error={!!errors.siteName}
           id="siteName"
@@ -181,26 +166,25 @@ export default function AdminDetail() {
           onChange={handleInputChange}
           helperText={errors.siteIntroduction?.message}
         />
-        <TextField
+        <InputLabel id="category-label">★カテゴリーを選択して下さい</InputLabel>
+        <Select
           error={!!errors.category}
           id="category"
           {...register("category")}
           label="選択する"
           variant="outlined"
-          margin="normal"
-          select
+          margin="dense"
           required
           value={detail.category}
           fullWidth
           onChange={handleInputChange}
-          helperText="★カテゴリーを選択して下さい"
         >
           {categorys.map((category) => (
-            <option key={category.value} value={category.value}>
+            <MenuItem key={category.value} value={category.value}>
               {category.label}
-            </option>
+            </MenuItem>
           ))}
-        </TextField>
+        </Select>
         <Typography>*サイト画像</Typography>
         <Button
           variant="outlined"
@@ -235,7 +219,6 @@ export default function AdminDetail() {
           variant="contained"
           color="primary"
           className={classes.submit}
-          onClick={() => onClick}
           component={Link}
           to="/admin/AdminConfirm"
         >
@@ -244,4 +227,6 @@ export default function AdminDetail() {
       </form>
     </AdminTemplate>
   );
-}
+};
+
+export default AdminDetail;

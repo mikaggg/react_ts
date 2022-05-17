@@ -35,15 +35,9 @@ const DeleteModal = (props: any) => {
 
   const deleteSite = async () => {
     try {
-      deleteDoc(doc(store, "sites", detail.id));
+      await deleteDoc(doc(store, "sites", detail.id));
       const desertRef = ref(storage, "image/" + detail.imageName);
-      deleteObject(desertRef)
-        .then(() => {
-          console.log("success");
-        })
-        .catch((error) => {
-          console.log("storage delete Error:" + error);
-        });
+      await deleteObject(desertRef);
     } catch (e) {
       console.log("Error Delete", e);
     }

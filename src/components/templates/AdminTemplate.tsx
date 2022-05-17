@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Copyright = React.memo(() => {
+const Copyright = () => {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
@@ -87,7 +87,7 @@ const Copyright = React.memo(() => {
       {"."}
     </Typography>
   );
-});
+};
 interface GenericTemplateProps {
   children: React.ReactNode;
   title: string;

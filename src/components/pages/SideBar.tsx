@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const SideBar = React.memo(() => {
+const SideBar = () => {
   const classes = useStyles();
   return (
     <List>
@@ -140,5 +140,5 @@ const SideBar = React.memo(() => {
       </Link>
     </List>
   );
-});
+};
 export default SideBar;

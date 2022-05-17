@@ -1,7 +1,7 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import AdminTemplate from "../templates/AdminTemplate";
 import { SiteContext } from "../atoms/context";
-import { Button, Typography, Grid } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { categorys } from "../atoms/prefectures";
 import { ref, uploadString, deleteObject } from "firebase/storage";
@@ -13,7 +13,6 @@ import "../../App.css";
 const AdminConfirm = () => {
   const { detail } = useContext(SiteContext);
   const { image } = useContext(ImageContext);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const onClick = async () => {
     const data = {
@@ -28,36 +27,19 @@ const AdminConfirm = () => {
     const storeRef = doc(store, "sites", detail.id);
     try {
       await runTransaction(store, async (transaction) => {
-        const sitesDoc = await transaction.set(storeRef, data);
-        if (!sitesDoc) {
-          throw "Document dose not exist!";
-        }
+        await transaction.set(storeRef, data);
         const storageRef = ref(storage, "image/" + image.imageName);
-        uploadString(storageRef, image.image, "data_url")
-          .then((snapshot) => {
-            console.log("success!");
-            const desertRef = ref(storage, "image/" + image.beforeImageName);
-            deleteObject(desertRef)
-              .then(() => {
-                console.log("success: delete beforeImage");
-              })
-              .catch((error) => {
-                console.log("storage delete Error:" + error);
-              });
-          })
-          .catch(() => {
-            setErrorMessage("画像の登録に失敗しました。");
-            throw "error: strage upload";
-          });
+        await uploadString(storageRef, image.image, "data_url");
+        const desertRef = ref(storage, "image/" + image.beforeImageName);
+        await deleteObject(desertRef);
       });
-    } catch (e) {}
+    } catch (e) {
+      console.log("Error" + e);
+    }
   };
 
   return (
     <AdminTemplate title="確認画面">
-      {errorMessage && (
-        <Typography color="secondary">{errorMessage}</Typography>
-      )}
       <p>{detail.siteName}</p>
       <p>{detail.url}</p>
       <p>{detail.siteIntroduction}</p>
