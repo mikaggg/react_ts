@@ -69,6 +69,7 @@ const AdminPage: React.FC = () => {
     });
     setImage({
       ...image,
+      imageName: row.imageName,
       imageUrl: row.imageUrl,
     });
   };
@@ -84,8 +85,8 @@ const AdminPage: React.FC = () => {
       const q = query(sitesCollection, orderBy("createdAt", "desc"));
 
       try {
-        const querySnapshot = await getDocs(q);
-        const a = await Promise.all(
+        let querySnapshot = await getDocs(q);
+        let a = await Promise.all(
           querySnapshot.docs.map((doc) => {
             return getDownloadURL(
               ref(storage, "image/" + doc.data().imageName)

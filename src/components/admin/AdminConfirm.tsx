@@ -10,7 +10,7 @@ import { doc, serverTimestamp, runTransaction } from "firebase/firestore";
 import { ImageContext } from "../atoms/imageContext";
 import "../../App.css";
 
-const AdminConfirm = () => {
+const AdminConfirm = (props: any) => {
   const { detail } = useContext(SiteContext);
   const { image } = useContext(ImageContext);
 
@@ -33,8 +33,9 @@ const AdminConfirm = () => {
         const desertRef = ref(storage, "image/" + image.beforeImageName);
         await deleteObject(desertRef);
       });
+      props.history.push("/admin/home");
     } catch (e) {
-      console.log("Error" + e);
+      alert("更新エラー:" + e);
     }
   };
 
@@ -64,8 +65,6 @@ const AdminConfirm = () => {
             type="submit"
             variant="contained"
             color="primary"
-            component={Link}
-            to="/admin/home"
             onClick={onClick}
           >
             登録

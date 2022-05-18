@@ -3,8 +3,7 @@ import AdminTemplate from "../templates/AdminTemplate";
 import { Button, InputLabel, TextField, Typography } from "@material-ui/core";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import { Box, Container } from "@material-ui/core";
-import { Select, MenuItem } from "@material-ui/core";
+import { Box, Container, MenuItem, Select } from "@material-ui/core";
 import { storage, store } from "../atoms/firebase";
 import { collection, doc, serverTimestamp } from "firebase/firestore";
 import { runTransaction } from "firebase/firestore";
@@ -51,7 +50,7 @@ interface FormValues {
   category: string;
 }
 
-const schema = yup.object().shape({
+const schema = yup.object({
   siteName: yup.string().required("必須項目です"),
   url: yup.string().url("正しいURLを入力してください").required("必須項目です"),
   siteIntroduction: yup.string().required("必須項目です"),
@@ -76,38 +75,23 @@ const resizeFile = (file: Blob) =>
 
 const AdminSiteAdd: React.FC = () => {
   const classes = useStyles();
-  const [values, setValue] = useState<FormValues>({
-    siteName: "",
-    url: "",
-    siteIntroduction: "",
-    category: "",
-  });
   const [image, setImage] = useState<string>("");
   const [imageName, setImageName] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>("");
-
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormValues>({
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
 
-  const handleInputChange = (
-    e: React.ChangeEvent<{ value: any; name?: any }>
-  ) => {
-    const { name, value } = e.target;
-    setValue({
-      ...values,
-      [name]: value,
-    });
-  };
-
   const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const imageName = e.target.files?.[0].name;
     const blobImage = e.target.files?.[0] as Blob;
+    console.log(e.target.files);
 
     if (imageName !== undefined && blobImage !== undefined) {
       if (/image.*/.exec(blobImage.type)) {
@@ -120,19 +104,19 @@ const AdminSiteAdd: React.FC = () => {
   };
 
   const clearInput = () => {
-    setValue({ siteName: "", url: "", siteIntroduction: "", category: "" });
     setImage("");
     setImageName("");
     setImageUrl("");
+    reset();
   };
 
-  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onSubmit = async (value: FormValues) => {
     const storeRef = doc(collection(store, "sites"));
     const data = {
-      siteName: values.siteName,
-      url: values.url,
-      siteIntroduction: values.siteIntroduction,
-      category: values.category,
+      siteName: value.siteName,
+      url: value.url,
+      siteIntroduction: value.siteIntroduction,
+      category: value.category,
       imageName: imageName,
       createdAt: serverTimestamp(),
     };
@@ -162,63 +146,51 @@ const AdminSiteAdd: React.FC = () => {
             CLEAR
           </Button>
         </Box>
-
         <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
           <TextField
             error={!!errors.siteName}
-            id="siteName"
             {...register("siteName")}
             label="サイト名"
             variant="outlined"
             margin="normal"
             fullWidth
             required
-            value={values.siteName}
-            onChange={handleInputChange}
             helperText={errors.siteName?.message}
           />
           <TextField
             error={!!errors.url}
-            id="url"
             {...register("url")}
-            label="サイトURL"
+            label="URL"
             variant="outlined"
             margin="normal"
             fullWidth
             required
-            value={values.url}
-            onChange={handleInputChange}
             helperText={errors.url?.message}
           />
           <TextField
             error={!!errors.siteIntroduction}
-            id="siteIntroduction"
             {...register("siteIntroduction")}
-            label="サイト紹介文"
+            label="サイト説明文"
             variant="outlined"
             margin="normal"
             fullWidth
             required
             multiline
             rows={4}
-            value={values.siteIntroduction}
-            onChange={handleInputChange}
-            helperText={errors.siteIntroduction?.message}
+            helperText={errors.siteName?.message}
           />
           <InputLabel id="category-label">
             ★カテゴリーを選択して下さい
           </InputLabel>
           <Select
-            error={!!errors.category}
             labelId="category-label"
-            id="category"
+            error={!!errors.category}
             {...register("category")}
+            label="サイト名"
             variant="outlined"
-            margin="none"
-            required
+            margin="dense"
             fullWidth
-            onChange={handleInputChange}
-            value={values.category}
+            required
           >
             {categorys.map((category) => (
               <MenuItem key={category.value} value={category.value}>

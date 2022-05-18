@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import AdminTemplate from "../templates/AdminTemplate";
-import { makeStyles, Theme, LinearProgress } from "@material-ui/core/";
-import { Typography, TextField, Button, Input } from "@material-ui/core/";
+import { makeStyles, Theme } from "@material-ui/core/";
+import { Typography, TextField, Button } from "@material-ui/core/";
 import { Select, MenuItem, InputLabel } from "@material-ui/core";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,7 +10,6 @@ import { useForm } from "react-hook-form";
 import { categorys } from "../atoms/prefectures";
 import { SiteContext } from "../atoms/context";
 import { ImageContext } from "../atoms/imageContext";
-import { Link } from "react-router-dom";
 import Resizer from "react-image-file-resizer";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -46,12 +45,11 @@ interface FormValues {
   category: string;
 }
 
-const schema = yup.object().shape({
+const schema = yup.object({
   siteName: yup.string().required("必須項目です"),
   url: yup.string().url("正しいURLを入力してください").required("必須項目です"),
   siteIntroduction: yup.string().required("必須項目です"),
   category: yup.string().required(),
-  image: yup.mixed().required("画像が選択されていません"),
 });
 
 const resizeFile = (file: Blob) =>
@@ -70,17 +68,13 @@ const resizeFile = (file: Blob) =>
     );
   });
 
-const AdminDetail = () => {
+const AdminDetail = (props: any) => {
   const classes = useStyles();
   const { detail, setDetail } = useContext(SiteContext);
   const { image, setImage } = useContext(ImageContext);
-  const [progress, setProgress] = useState(0);
   const [beforeImageName, setBeforeImageName] = useState("");
 
   useEffect(() => {
-    setMessage("");
-    setErrorMessage("");
-    setProgress(0);
     setBeforeImageName(detail.imageName);
   });
 
@@ -120,14 +114,15 @@ const AdminDetail = () => {
     }
   };
 
-  const onSubmit = (data: FormValues) => console.log(data);
+  const onSubmit = (value: FormValues) => {
+    props.history.push("/admin/Confirm");
+  };
 
   return (
     <AdminTemplate title="サイト編集">
-      <form className={classes.form} onSubmit={() => handleSubmit(onSubmit)}>
+      <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
         <TextField
           error={!!errors.siteName}
-          id="siteName"
           {...register("siteName")}
           label="サイト名"
           variant="outlined"
@@ -135,12 +130,11 @@ const AdminDetail = () => {
           fullWidth
           required
           value={detail.siteName}
-          onChange={handleInputChange}
           helperText={errors.siteName?.message}
+          onChange={handleInputChange}
         />
         <TextField
           error={!!errors.url}
-          id="url"
           {...register("url")}
           label="サイトURL"
           variant="outlined"
@@ -148,12 +142,11 @@ const AdminDetail = () => {
           fullWidth
           required
           value={detail.url}
-          onChange={handleInputChange}
           helperText={errors.url?.message}
+          onChange={handleInputChange}
         />
         <TextField
           error={!!errors.siteIntroduction}
-          id="siteIntroduction"
           {...register("siteIntroduction")}
           label="サイト紹介文"
           variant="outlined"
@@ -163,20 +156,19 @@ const AdminDetail = () => {
           value={detail.siteIntroduction}
           multiline
           rows={4}
-          onChange={handleInputChange}
           helperText={errors.siteIntroduction?.message}
+          onChange={handleInputChange}
         />
-        <InputLabel id="category-label">★カテゴリーを選択して下さい</InputLabel>
+        <InputLabel id="category-label">*カテゴリーを選択して下さい</InputLabel>
         <Select
           error={!!errors.category}
-          id="category"
           {...register("category")}
           label="選択する"
           variant="outlined"
           margin="dense"
+          fullWidth
           required
           value={detail.category}
-          fullWidth
           onChange={handleInputChange}
         >
           {categorys.map((category) => (
@@ -193,20 +185,15 @@ const AdminDetail = () => {
           className={classes.uploadButton}
         >
           UPLOAD
-          <Input
+          <input
             type="file"
             name="image"
-            required
             className={classes.inputButton}
             onChange={handleChangeImage}
+            //value={image.imageName}
+            accept="image/*"
           />
         </Button>
-        {progress > 0 && progress !== 100 && (
-          <div>
-            <LinearProgress variant="determinate" value={progress} />
-            <Typography>{`${Math.round(progress)}`}%</Typography>
-          </div>
-        )}
         <p>{image.imageName}</p>
         <div className={classes.preview}>
           {image.imageUrl && (
@@ -219,8 +206,6 @@ const AdminDetail = () => {
           variant="contained"
           color="primary"
           className={classes.submit}
-          component={Link}
-          to="/admin/AdminConfirm"
         >
           確認
         </Button>
