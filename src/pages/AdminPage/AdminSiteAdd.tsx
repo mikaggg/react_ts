@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import AdminTemplate from "../templates/AdminTemplate";
+import AdminTemplate from "./AdminTemplate";
 import { Button, InputLabel, TextField, Typography } from "@material-ui/core";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { Box, Container, MenuItem, Select } from "@material-ui/core";
-import { storage, store } from "../atoms/firebase";
+import { storage, store } from "../../config/firebase";
 import { collection, doc, serverTimestamp } from "firebase/firestore";
 import { runTransaction } from "firebase/firestore";
 import { ref, uploadString } from "firebase/storage";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { categorys } from "../atoms/prefectures";
+import categorys from "../../constants/categorys";
 import Resizer from "react-image-file-resizer";
 
 const useStyles = makeStyles((theme: Theme) => ({

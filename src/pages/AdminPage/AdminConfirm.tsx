@@ -1,13 +1,13 @@
 import { useContext } from "react";
-import AdminTemplate from "../templates/AdminTemplate";
-import { SiteContext } from "../atoms/context";
+import AdminTemplate from "./AdminTemplate";
+import { SiteContext } from "../../contexts/context";
 import { Button, Grid } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { categorys } from "../atoms/prefectures";
+import categorys from "../../constants/categorys";
 import { ref, uploadString, deleteObject } from "firebase/storage";
-import { storage, store } from "../atoms/firebase";
+import { storage, store } from "../../config/firebase";
 import { doc, serverTimestamp, runTransaction } from "firebase/firestore";
-import { ImageContext } from "../atoms/imageContext";
+import { ImageContext } from "../../contexts/imageContext";
 import "../../App.css";
 
 const AdminConfirm = (props: any) => {

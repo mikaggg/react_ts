@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
+import clsx from "clsx";
+import theme from "../constants/theme";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import theme from "../atoms/theme";
-import { ThemeProvider } from "@material-ui/styles";
-import { Typography, Box, Container } from "@material-ui/core";
+import { ThemeProvider, Typography, Box } from "@material-ui/core";
+import { CssBaseline, Drawer } from "@material-ui/core";
+import { Divider, Container, IconButton } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import AdminSideBar from "../admin/AdminSideBar";
-import AdminHead from "../admin/AdminHead";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import SideBar from "./SideBar";
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -17,21 +19,12 @@ const useStyles = makeStyles((theme: Theme) =>
     toolbarIcon: {
       display: "flex",
       alignItems: "center",
-      justifyContent: "flex-end",
+      justifyContent: "ftex-end",
       padding: "0 8px",
       ...theme.mixins.toolbar,
     },
-    menuButton: {
-      marginRight: 36,
-    },
-    menuButtonHidden: {
-      display: "none",
-    },
-    title: {
-      flexGrow: 1,
-    },
     pageTitle: {
-      marginBottom: theme.spacing(1),
+      position: "absolute",
     },
     drawerPaper: {
       position: "relative",
@@ -53,7 +46,15 @@ const useStyles = makeStyles((theme: Theme) =>
         width: theme.spacing(9),
       },
     },
-    appBarSpacer: theme.mixins.toolbar,
+    appSpacer: {
+      display: "flex",
+      [theme.breakpoints.up("sm")]: {
+        height: 250,
+      },
+      [theme.breakpoints.down("sm")]: {
+        height: 180,
+      },
+    },
     content: {
       flexGrow: 1,
       height: "100vh",
@@ -61,7 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     container: {
       paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
+      paddingButtom: theme.spacing(4),
     },
     paper: {
       padding: theme.spacing(2),
@@ -79,40 +80,67 @@ const useStyles = makeStyles((theme: Theme) =>
 const Copyright = () => {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" to="/admin">
-        管理画面
+      {"Copyright ©︎ "}
+      <Link color="inherit" to="/">
+        収集サイト.com
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
     </Typography>
   );
 };
+
 interface GenericTemplateProps {
   children: React.ReactNode;
-  title: string;
+  title: React.ReactNode;
 }
 
-const AdminTemplate = ({ children, title }: GenericTemplateProps) => {
+const GenericTemplate = ({ children, title }: GenericTemplateProps) => {
   const classes = useStyles();
+  const [open, setOpen] = useState(true);
+  const handleDrawer = () => {
+    setOpen(!open);
+  };
+
+  console.log(title);
 
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
-        <AdminHead />
-        <AdminSideBar />
+        <CssBaseline />
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          }}
+          open={open}
+        >
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={handleDrawer}>
+              <ChevronLeftIcon />
+              収集サイト.com
+            </IconButton>
+          </div>
+          <Divider />
+          <SideBar />
+          <div>
+            <Link to="/admin/home" className={classes.link}>
+              管理者画面
+            </Link>
+          </div>
+        </Drawer>
         <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
-          <Container maxWidth="lg" className={classes.container}>
+          <div className={classes.appSpacer}>
             <Typography
-              component="h2"
-              variant="h5"
+              variant="h6"
               color="inherit"
               noWrap
               className={classes.pageTitle}
-            >
-              {title}
-            </Typography>
+            ></Typography>
+            {title}
+          </div>
+          <Divider />
+          <Container maxWidth="lg" className={classes.container}>
             {children}
             <Box pt={4}>
               <Copyright />
@@ -123,4 +151,4 @@ const AdminTemplate = ({ children, title }: GenericTemplateProps) => {
     </ThemeProvider>
   );
 };
-export default AdminTemplate;
+export default GenericTemplate;

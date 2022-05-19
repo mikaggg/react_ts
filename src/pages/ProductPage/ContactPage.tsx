@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import GenericTemplate from "../templates/GenericTemplate";
+import GenericTemplate from "../../components/GenericTemplate";
 import { Button, CssBaseline, Container } from "@material-ui/core";
 import { TextField, Typography, makeStyles } from "@material-ui/core";
-import prefectures from "../atoms/prefectures";
+import prefectures from "../../constants/prefectures";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";

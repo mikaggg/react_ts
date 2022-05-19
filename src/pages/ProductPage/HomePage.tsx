@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import GenericTemplate from "../templates/GenericTemplate";
-import ImgMediaCard from "../pages/ImgMediaCard";
+import GenericTemplate from "../../components/GenericTemplate";
+import ImgMediaCard from "../../components/ImgMediaCard";
 interface UrlProps {
   param: string;
 }

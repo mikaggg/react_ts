@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
-import { AuthUserContext } from "../molecules/AuthUserContext";
+import { AuthUserContext } from "../../contexts/AuthUserContext";
 import {
   Button,
   Container,
@@ -13,7 +13,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { auth } from "../atoms/firebase";
+import { auth } from "../../config/firebase";
 import { makeStyles } from "@material-ui/core";
 import { signInWithEmailAndPassword } from "firebase/auth";
 

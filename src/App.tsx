@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import PrivateRoute from "./components/molecules/PrivateRoute";
-import Login from "./components/pages/Login";
-import ProductPage from "./components/pages/ProductPage";
-import HomePage from "./components/pages/HomePage";
-import AdminPage from "./components/admin/AdminPage";
-import AuthUserContextProvider from "./components/molecules/AuthUserContext";
-import AdminSiteAdd from "./components/admin/AdminSiteAdd";
-import ContactPage from "./components/pages/ContactPage";
-import AdminDetail from "./components/admin/AdminDetail";
-import OnlineServicePage from "./components/pages/OnlineServicePage";
-import { SiteContext, initialValue } from "./components/atoms/context";
-import AdminConfirm from "./components/admin/AdminConfirm";
-import { ImageContext, imageValue } from "./components/atoms/imageContext";
-import Test from "./components/organisms/test";
+import PrivateRoute from "./pages/ProductPage/PrivateRoute";
+import Login from "./pages/ProductPage/Login";
+import ProductPage from "./pages/ProductPage/DesignPage";
+import HomePage from "./pages/ProductPage/HomePage";
+import AdminPage from "./pages/AdminPage/AdminPage";
+import AuthUserContextProvider from "./contexts/AuthUserContext";
+import AdminSiteAdd from "./pages/AdminPage/AdminSiteAdd";
+import ContactPage from "./pages/ProductPage/ContactPage";
+import AdminDetail from "./pages/AdminPage/AdminDetail";
+import OnlineServicePage from "./pages/ProductPage/OnlineServicePage";
+import { SiteContext, initialValue } from "./contexts/context";
+import AdminConfirm from "./pages/AdminPage/AdminConfirm";
+import { ImageContext, imageValue } from "./contexts/imageContext";
 
 const App: React.FC = () => {
   const [detail, setDetail] = useState(initialValue);
@@ -51,7 +50,6 @@ const App: React.FC = () => {
               />
             </ImageContext.Provider>
           </SiteContext.Provider>
-          <PrivateRoute path="/admin/test" component={Test} exact />
         </AuthUserContextProvider>
       </Switch>
     </Router>

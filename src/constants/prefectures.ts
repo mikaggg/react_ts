@@ -1,9 +1,9 @@
-export interface pref {
+export interface Pref {
   value: string;
   label: string;
 }
 
-const prefectures: pref[] = [
+const prefectures: Pref[] = [
   { value: "hookaido", label: "北海道" },
   { value: "aomori", label: "青森" },
   { value: "iwate", label: "岩手" },
@@ -51,25 +51,6 @@ const prefectures: pref[] = [
   { value: "miyazaki", label: "宮崎" },
   { value: "kagoshima", label: "鹿児島" },
   { value: "okinawa", label: "沖縄" },
-];
-
-interface category {
-  value: string;
-  label: string;
-}
-
-export const categorys: category[] = [
-  { value: "onlineService", label: "オンラインサービス" },
-  { value: "design", label: "デザイン・デザイン会社" },
-  { value: "construction", label: "建設・不動産" },
-  { value: "fashion", label: "ファッション" },
-  { value: "beauty", label: "ビューティー" },
-  { value: "life", label: "生活・旅行・交通・ホテル" },
-  { value: "medical", label: "医療" },
-  { value: "food", label: "飲食関連・食品" },
-  { value: "portal", label: "ポータブル・ブログ" },
-  { value: "game", label: "ゲーム・音楽" },
-  { value: "enterprise", label: "企業・法人・コーポレートサイト" },
 ];
 
 export default prefectures;

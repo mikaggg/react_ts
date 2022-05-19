@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import AdminTemplate from "../templates/AdminTemplate";
+import AdminTemplate from "./AdminTemplate";
 import { makeStyles, Theme } from "@material-ui/core/";
 import { Typography, TextField, Button } from "@material-ui/core/";
 import { Select, MenuItem, InputLabel } from "@material-ui/core";
@@ -7,9 +7,9 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { categorys } from "../atoms/prefectures";
-import { SiteContext } from "../atoms/context";
-import { ImageContext } from "../atoms/imageContext";
+import categorys from "../../constants/categorys";
+import { SiteContext } from "../../contexts/context";
+import { ImageContext } from "../../contexts/imageContext";
 import Resizer from "react-image-file-resizer";
 
 const useStyles = makeStyles((theme: Theme) => ({

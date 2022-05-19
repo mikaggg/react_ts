@@ -1,6 +1,6 @@
 import React from "react";
-import GenericTemplate from "../templates/GenericTemplate";
-import ImgMediaCard from "./ImgMediaCard";
+import GenericTemplate from "../../components/GenericTemplate";
+import ImgMediaCard from "../../components/ImgMediaCard";
 import DesktopMacIcon from "@material-ui/icons/DesktopMac";
 import { Typography } from "@material-ui/core";
 

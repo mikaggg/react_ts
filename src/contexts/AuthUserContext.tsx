@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { User } from "firebase/auth";
-import { auth } from "../atoms/firebase";
+import { auth } from "../config/firebase";
 interface AuthUserContextType {
   userCredential: User | null | undefined;
 }

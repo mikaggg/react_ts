@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, makeStyles, Box } from "@material-ui/core";
 import CardActionsArea from "@material-ui/core/CardActionArea";
 import { CardMedia, Typography, CardContent } from "@material-ui/core";
-import { storage, store } from "../atoms/firebase";
+import { storage, store } from "../config/firebase";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 

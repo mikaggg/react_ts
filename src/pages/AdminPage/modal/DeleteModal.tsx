@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { Button, Grid } from "@material-ui/core";
-import { SiteContext } from "../../atoms/context";
+import { SiteContext } from "../../../contexts/context";
 import { doc, deleteDoc } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
-import { store, storage } from "../../atoms/firebase";
+import { store, storage } from "../../../config/firebase";
 
 const useStyles = makeStyles(() =>
   createStyles({

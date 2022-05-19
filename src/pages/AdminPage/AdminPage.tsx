@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
-import AdminTemplate from "../templates/AdminTemplate";
+import AdminTemplate from "./AdminTemplate";
 import { Link } from "react-router-dom";
-import { store, storage } from "../atoms/firebase";
+import { store, storage } from "../../config/firebase";
 import { TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { IconButton } from "@material-ui/core";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
-import { SiteContext } from "../atoms/context";
-import { ImageContext } from "../atoms/imageContext";
-import DeleteModal from "../admin/component/DeleteModal";
+import { SiteContext } from "../../contexts/context";
+import { ImageContext } from "../../contexts/imageContext";
+import DeleteModal from "./modal/DeleteModal";
 
 interface Column {
   id:
