@@ -1,7 +1,9 @@
 import { useContext } from "react";
 import AdminTemplate from "./AdminTemplate";
 import { SiteContext } from "../../contexts/context";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, Paper } from "@material-ui/core";
+import { TableBody, TableCell, TableContainer } from "@material-ui/core";
+import { TableRow, Table } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import categorys from "../../constants/categorys";
 import { ref, uploadString, deleteObject } from "firebase/storage";
@@ -23,28 +25,49 @@ const AdminConfirm = (props: any) => {
       imageName: image.imageName,
       createdAt: serverTimestamp(),
     };
+    console.log(detail);
 
-    const storeRef = doc(store, "sites", detail.id);
     try {
       await runTransaction(store, async (transaction) => {
-        await transaction.set(storeRef, data);
-        const storageRef = ref(storage, "image/" + image.imageName);
-        await uploadString(storageRef, image.image, "data_url");
-        const desertRef = ref(storage, "image/" + image.beforeImageName);
-        await deleteObject(desertRef);
+        const storeRef = await doc(store, "sites", detail.id);
+        await transaction.update(storeRef, data);
+        if (image.imageName !== image.beforeImageName) {
+          const storageRef = ref(storage, "image/" + image.imageName);
+          await uploadString(storageRef, image.image, "data_url");
+          const desertRef = ref(storage, "image/" + image.beforeImageName);
+          await deleteObject(desertRef);
+        }
       });
-      props.history.push("/admin/home");
     } catch (e) {
       alert("更新エラー:" + e);
     }
+    props.history.push("/admin/home");
   };
 
   return (
     <AdminTemplate title="確認画面">
-      <p>{detail.siteName}</p>
-      <p>{detail.url}</p>
-      <p>{detail.siteIntroduction}</p>
-      <p>{detail.category}</p>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell>サイト名</TableCell>
+              <TableCell>{detail.siteName}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>URL</TableCell>
+              <TableCell>{detail.url}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>紹介文</TableCell>
+              <TableCell>{detail.siteIntroduction}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>カテゴリー</TableCell>
+              <TableCell>{detail.category}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
       <p className="preview">
         <img className="previewImg" src={image.imageUrl} alt="" />
       </p>

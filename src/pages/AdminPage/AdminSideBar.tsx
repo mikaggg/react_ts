@@ -8,7 +8,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import HomeIcon from "@material-ui/icons/Home";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import { auth } from "../atoms/firebase";
+import { auth } from "../../config/firebase";
 
 const drawerWidth = 240;
 

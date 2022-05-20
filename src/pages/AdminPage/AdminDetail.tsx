@@ -7,6 +7,7 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import categorys from "../../constants/categorys";
 import { SiteContext } from "../../contexts/context";
 import { ImageContext } from "../../contexts/imageContext";
@@ -114,9 +115,7 @@ const AdminDetail = (props: any) => {
     }
   };
 
-  const onSubmit = (value: FormValues) => {
-    props.history.push("/admin/Confirm");
-  };
+  const onSubmit = (value: FormValues) => {};
 
   return (
     <AdminTemplate title="サイト編集">
@@ -206,6 +205,8 @@ const AdminDetail = (props: any) => {
           variant="contained"
           color="primary"
           className={classes.submit}
+          component={Link}
+          to="/admin/AdminConfirm"
         >
           確認
         </Button>
