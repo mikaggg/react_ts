@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useContext } from "react";
 import AdminTemplate from "./AdminTemplate";
 import { makeStyles, Theme } from "@material-ui/core/";
 import { Typography, TextField, Button } from "@material-ui/core/";
@@ -73,11 +73,6 @@ const AdminDetail = (props: any) => {
   const classes = useStyles();
   const { detail, setDetail } = useContext(SiteContext);
   const { image, setImage } = useContext(ImageContext);
-  const [beforeImageName, setBeforeImageName] = useState("");
-
-  useEffect(() => {
-    setBeforeImageName(detail.imageName);
-  });
 
   const {
     register,
@@ -106,10 +101,10 @@ const AdminDetail = (props: any) => {
       if (/image.*/.exec(blobImage.type)) {
         const resizeImage = (await resizeFile(blobImage)) as any as string;
         setImage({
+          ...image,
           image: resizeImage,
           imageUrl: window.URL.createObjectURL(blobImage),
           imageName: imageName,
-          beforeImageName: beforeImageName,
         });
       }
     }

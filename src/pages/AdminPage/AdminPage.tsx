@@ -11,6 +11,7 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { SiteContext } from "../../contexts/context";
 import { ImageContext } from "../../contexts/imageContext";
 import DeleteModal from "./modal/DeleteModal";
+import categorys from "../../constants/categorys";
 
 interface Column {
   id:
@@ -71,6 +72,7 @@ const AdminPage: React.FC = () => {
       ...image,
       imageName: row.imageName,
       imageUrl: row.imageUrl,
+      beforeImageName: row.imageName,
     });
   };
 
@@ -99,7 +101,10 @@ const AdminPage: React.FC = () => {
                 imageName: doc.data().imageName,
                 imageUrl: imageUrl,
                 createdAt: doc.data().createdAt.seconds,
-                category: doc.data().category,
+                category:
+                  categorys.find(
+                    (category) => category.value === doc.data().category
+                  )?.label || doc.data().category,
                 categoryName: doc.data().category,
               };
             });

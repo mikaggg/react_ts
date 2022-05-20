@@ -25,21 +25,25 @@ const AdminConfirm = (props: any) => {
       imageName: image.imageName,
       createdAt: serverTimestamp(),
     };
-    console.log(detail);
-
+    console.log(image);
     try {
       await runTransaction(store, async (transaction) => {
-        const storeRef = await doc(store, "sites", detail.id);
-        await transaction.update(storeRef, data);
-        if (image.imageName !== image.beforeImageName) {
-          const storageRef = ref(storage, "image/" + image.imageName);
-          await uploadString(storageRef, image.image, "data_url");
-          const desertRef = ref(storage, "image/" + image.beforeImageName);
-          await deleteObject(desertRef);
+        try {
+          const storeRef = await doc(store, "sites", detail.id);
+          await transaction.update(storeRef, data);
+
+          if (image.imageName !== image.beforeImageName && image.image !== "") {
+            const storageRef = ref(storage, "image/" + image.imageName);
+            await uploadString(storageRef, image.image, "data_url");
+            const desertRef = ref(storage, "image/" + image.beforeImageName);
+            await deleteObject(desertRef);
+          }
+        } catch (e) {
+          console.log(e);
         }
       });
     } catch (e) {
-      alert("更新エラー:" + e);
+      console.log("更新エラー:" + e);
     }
     props.history.push("/admin/home");
   };
@@ -63,7 +67,13 @@ const AdminConfirm = (props: any) => {
             </TableRow>
             <TableRow>
               <TableCell>カテゴリー</TableCell>
-              <TableCell>{detail.category}</TableCell>
+              <TableCell>
+                {
+                  categorys.filter(
+                    (category) => category.value === detail.category
+                  )[0].label
+                }
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
