@@ -6,7 +6,6 @@ import { storage, store } from "../config/firebase";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import Pagination from "@material-ui/lab/Pagination";
-import { ContactSupportOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   hpCard: {
