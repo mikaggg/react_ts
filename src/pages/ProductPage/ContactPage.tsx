@@ -53,7 +53,7 @@ const schema = yup.object().shape({
     .required("メールアドレスは必須項目です"),
   tel: yup
     .string()
-    .matches(/^0\d+$/, "電話番号を入力して下さい")
+    .matches(/^0\d+$/, "電話番号を小文字で入力して下さい")
     .required("電話番号は必須項目です"),
   site: yup.string().url("正しいURLを入力してください"),
   //site: yup.string().matches(/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/, "正しいURLを入力して下さい").required("URLは必須項目です"),

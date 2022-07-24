@@ -15,6 +15,7 @@ import categorys from "../../constants/categorys";
 
 interface Column {
   id:
+    | "no"
     | "siteName"
     | "url"
     | "siteIntroduction"
@@ -30,11 +31,12 @@ interface Column {
 }
 
 const columns: Column[] = [
+  { id: "no", label: "No" },
   { id: "siteName", label: "サイト名", minWidth: 150 },
   { id: "url", label: "サイトURL", minWidth: 150 },
   { id: "siteIntroduction", label: "サイト紹介文", minWidth: 170 },
   { id: "imageName", label: "画像ファイル", minWidth: 150 },
-  { id: "category", label: "カテゴリー", minWidth: 90 },
+  { id: "category", label: "カテゴリー", minWidth: 150 },
   { id: "createdAt", label: "created", minWidth: 150 },
   { id: "edit" },
   { id: "delete" },
@@ -101,11 +103,11 @@ const AdminPage: React.FC = () => {
                 imageName: doc.data().imageName,
                 imageUrl: imageUrl,
                 createdAt: doc.data().createdAt.seconds,
-                category:
+                category: doc.data().category,
+                categoryName:
                   categorys.find(
                     (category) => category.value === doc.data().category
                   )?.label || doc.data().category,
-                categoryName: doc.data().category,
               };
             });
           })
@@ -116,6 +118,7 @@ const AdminPage: React.FC = () => {
       }
     })();
   }, [showModal]);
+  console.log(sites);
 
   return (
     <AdminTemplate title="サイト一覧">
@@ -138,13 +141,16 @@ const AdminPage: React.FC = () => {
       <TableBody>
         {sites.map((row) => (
           <TableRow key={row.id}>
+            <TableCell>
+              {sites.findIndex(({ id }) => id === row.id) + 1}
+            </TableCell>
             <TableCell>{row.siteName}</TableCell>
             <TableCell>{row.url}</TableCell>
             <TableCell>{row.siteIntroduction}</TableCell>
             <TableCell>
               <img src={row.imageUrl} height="60" alt="" />
             </TableCell>
-            <TableCell>{row.category}</TableCell>
+            <TableCell>{row.categoryName}</TableCell>
             <TableCell>
               {new Date(row.createdAt * 1000).toLocaleString()}
             </TableCell>

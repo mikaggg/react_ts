@@ -25,7 +25,7 @@ const AdminConfirm = (props: any) => {
       imageName: image.imageName,
       createdAt: serverTimestamp(),
     };
-    console.log(image);
+    console.log(detail.category);
     try {
       await runTransaction(store, async (transaction) => {
         try {
@@ -68,11 +68,12 @@ const AdminConfirm = (props: any) => {
             <TableRow>
               <TableCell>カテゴリー</TableCell>
               <TableCell>
-                {
+                {detail.categoryName}
+                {/*{
                   categorys.filter(
                     (category) => category.value === detail.category
                   )[0].label
-                }
+                }*/}
               </TableCell>
             </TableRow>
           </TableBody>

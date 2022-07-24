@@ -13,6 +13,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import categorys from "../../constants/categorys";
 import Resizer from "react-image-file-resizer";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) => ({
   form: {
@@ -87,6 +88,7 @@ const AdminSiteAdd: React.FC = () => {
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
+  const history = useHistory();
 
   const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const imageName = e.target.files?.[0].name;
@@ -126,7 +128,7 @@ const AdminSiteAdd: React.FC = () => {
         await transaction.set(storeRef, data);
         const storageRef = ref(storage, "image/" + imageName);
         await uploadString(storageRef, image, "data_url");
-        clearInput();
+        history.push("/admin/home");
       });
     } catch (e) {
       console.log("Transaction failed:", e);

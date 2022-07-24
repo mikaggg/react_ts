@@ -69,7 +69,7 @@ const resizeFile = (file: Blob) =>
     );
   });
 
-const AdminDetail = (props: any) => {
+const AdminDetail = () => {
   const classes = useStyles();
   const { detail, setDetail } = useContext(SiteContext);
   const { image, setImage } = useContext(ImageContext);
@@ -162,7 +162,7 @@ const AdminDetail = (props: any) => {
           margin="dense"
           fullWidth
           required
-          value={detail.category}
+          defaultValue={detail.category}
           onChange={handleInputChange}
         >
           {categorys.map((category) => (
